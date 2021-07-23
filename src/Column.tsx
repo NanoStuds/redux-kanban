@@ -3,20 +3,26 @@ import styled from 'styled-components'
 import * as color from './color'
 import { Card } from './Card'
 import { PlusIcon } from './icon'
-import { InputForm } from './InputForm';
 import { InputForm as _InputForm } from './InputForm'
 
 export function Column({
   title,
-  cards,
+  filterValue: rawFilterValue,
+  cards: rawCards,
 }: {
   title?: string
+  filterValue?: string
   cards: {
     id: string
     text?: string
   }[]
 }) {
-  const totalCount = cards.length
+  const filterValue = rawFilterValue?.trim()
+  const keywords = filterValue?.toLowerCase().split(/\s + /g)?? []
+  const cards = rawCards.filter(({ text }) => 
+  keywords?.every( w => text?.toLowerCase().includes(w)),
+  )
+  const totalCount = rawCards.length
 
   const [text, setText] = useState('')
  
@@ -42,6 +48,8 @@ export function Column({
           onCancel={cancelInput}
         />
       )}
+
+      {filterValue && <ResultCount>{cards.length} results</ResultCount>}
 
       <VerticalScroll>
         {cards.map(({ id, text }) => (
@@ -101,8 +109,14 @@ const AddButton = styled.button.attrs({
   }
 `
 const InputForm = styled(_InputForm)`
-padding: 8px;
+  padding: 8px;
 `
+
+const ResultCount = styled.div`
+  color: ${color.Black};
+  font-size: 12px;
+  text-align: center;
+  `
 
 const VerticalScroll = styled.div`
   height: 100%;
