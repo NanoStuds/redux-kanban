@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
 import produce from 'immer'
 import { randomID, sortBy, reorderPatch } from './util'
 import { api, ColumnID, CardID } from './api'
@@ -22,7 +23,16 @@ type State = {
 }
 
 export function App() {
-  const [filterValue, setFilterValue] = useState('')
+  const dispatch = useDispatch()
+  const filterValue = useSelector(state => state.filterValue)
+  const setFilterValue = (value: string) =>
+    dispatch({
+      type: 'Filter.SetFilter',
+      payload: {
+        value,
+      },
+    })
+
   const [{ columns, cardsOrder }, setData] = useState<State>({ cardsOrder: {} })
 
   useEffect(() => {
