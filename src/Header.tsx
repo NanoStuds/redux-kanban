@@ -4,18 +4,14 @@ import * as color from './color'
 import { CardFilter } from './CardFilter'
 
 export function Header({
-  filterValue,
-  onFilterChange,
   className,
 }: {
-  filterValue?: string
-  onFilterChange?(value: string):void
   className?: string }) {
   return (
     <Container className={className}>
       <Logo>Board</Logo>
 
-      <CardFilter value={filterValue} onChange={onFilterChange}/>
+      <CardFilter />
     </Container>
   )
 }
